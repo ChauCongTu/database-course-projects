@@ -1,4 +1,3 @@
-CREATE DATABASE FMANAGEMENT;
 CREATE TABLE Hopdong(
     SOHD CHAR(5) NOT NULL PRIMARY KEY, 
     MUCLUONG INT NOT NULL, 
@@ -266,5 +265,4 @@ SELECT * FROM CauThu, Hopdong WHERE CauThu.SOHD = Hopdong.SOHD ORDER BY SOAO;
 -- Lấy ra những cầu thủ có cùng vị trí với cầu thủ "Joshua Kimmich" để thay thế khi chấn thương
 SELECT CauThu.*, CauThu_ViTri.VITRI FROM CauThu, CauThu_ViTri WHERE CauThu.ID_CT = CauThu_ViTri.ID_CT AND HOTEN != 'Joshua Kimmich' AND VITRI IN (SELECT VITRI FROM CauThu, CauThu_ViTri WHERE CauThu.ID_CT = CauThu_ViTri.ID_CT AND HOTEN = 'Joshua Kimmich');
 -- Lấy ra cầu thủ người Đức ghi được nhiều bàn nhất mà chưa đạt danh hiệu cá nhân nào
-use BaiTapLon
 SELECT HOTEN, BANTHANG FROM CauThu WHERE BANTHANG = (SELECT MAX(BANTHANG) MAXGOAL FROM CauThu WHERE QUOCTICH = 'Germany') AND NOT EXISTS (SELECT * FROM Thanhtich WHERE CauThu.ID_CT = Thanhtich.ID_CT) 
