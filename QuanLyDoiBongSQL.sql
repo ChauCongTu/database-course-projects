@@ -258,11 +258,18 @@ INSERT INTO thanhtich(ID_ACHIE, TENGIAITHUONG, NGAYNHANGIAI, ID_CT) VALUES ('AC0
 INSERT INTO thanhtich(ID_ACHIE, TENGIAITHUONG, NGAYNHANGIAI, ID_CT) VALUES ('AC004','UEFA Goalkeeper Of The Year','2020-11-14','GK001');
 
 -- Truy vấn
+-- DỄ
 --Lấy ra thông tin của chủ tịch CLB hiện tại
 SELECT * FROM NhanSu, BanLanhDao, Hopdong WHERE NhanSu.MASONS = BanLanhDao.MASONS AND Hopdong.SOHD = NhanSu.SOHD AND CHUCVI = 'Chu Tich'
 -- In ra danh sách cầu thủ thuộc biên chế đội bóng, thông tin gồm thông số cá nhân và trình trạng hợp đồng và sắp xếp theo số áo tăng dần
 SELECT * FROM CauThu, Hopdong WHERE CauThu.SOHD = Hopdong.SOHD ORDER BY SOAO;
+-- VỪA
+-- LẤY RA DANH SÁCH CẦU THỦ ĐA NĂNG (CHƠI ĐƯỢC NHIỀU HƠN 1 VỊ TRÍ)
+SELECT * FROM CauThu AS CT WHERE 1 < ( SELECT COUNT(*) FROM CauThu_ViTri WHERE ID_CT = CT.ID_CT )
+-- Lấy ra số lượng cầu thủ có thể chơi được ở mỗi vị trí
+SELECT VITRI, COUNT(CauThu.ID_CT) AS SOLUONG FROM CauThu, CauThu_ViTri WHERE CauThu.ID_CT = CauThu_ViTri.ID_CT GROUP BY CauThu_ViTri.VITRI
+-- KHÓ
 -- Lấy ra những cầu thủ có cùng vị trí với cầu thủ "Joshua Kimmich" để thay thế khi chấn thương
 SELECT CauThu.*, CauThu_ViTri.VITRI FROM CauThu, CauThu_ViTri WHERE CauThu.ID_CT = CauThu_ViTri.ID_CT AND HOTEN != 'Joshua Kimmich' AND VITRI IN (SELECT VITRI FROM CauThu, CauThu_ViTri WHERE CauThu.ID_CT = CauThu_ViTri.ID_CT AND HOTEN = 'Joshua Kimmich');
--- Lấy ra cầu thủ người Đức ghi được nhiều bàn nhất mà chưa đạt danh hiệu cá nhân nào
-SELECT HOTEN, BANTHANG FROM CauThu WHERE BANTHANG = (SELECT MAX(BANTHANG) MAXGOAL FROM CauThu WHERE QUOCTICH = 'Germany') AND NOT EXISTS (SELECT * FROM Thanhtich WHERE CauThu.ID_CT = Thanhtich.ID_CT) 
+-- Lấy ra cầu thủ nhận lương cao nhất
+SELECT HOTEN, MUCLUONG, (YEAR(NGAYDENHAN)-YEAR(NGAYKYKET)) AS THOIHANHĐ FROM CauThu,Hopdong WHERE CauThu.SOHD = Hopdong.SOHD and Hopdong.MUCLUONG = (SELECT MAX(MUCLUONG) FROM Hopdong, CauThu WHERE Hopdong.SOHD=CauThu.SOHD);
