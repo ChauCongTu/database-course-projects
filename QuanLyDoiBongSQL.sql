@@ -148,7 +148,11 @@ AS
 	UPDATE HOADON SET THANHTIEN = SL * @tien
 	FROM CHITIETHOADON
 	WHERE HOADON.SOHD = @SOHD
--- sp tinh tong tien hoa don
+-- sp thong tin nhan vien
 CREATE PROC sp_thongtinnhanvien
 AS	
 	SELECT NV.*, CB.TENCAPBAC FROM NHANVIEN NV JOIN CAPBAC CB ON NV.MACB = CB.MACB
+-- sp thong tin san pham 
+CREATE proc sp_thongtinsanpham
+as
+	SELECT a.*, c.MAUSAC FROM SANPHAM a  join SP_MAUSAC c On a.MASP = c.MASP
